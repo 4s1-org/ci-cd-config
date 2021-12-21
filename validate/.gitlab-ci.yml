@@ -1,0 +1,18 @@
+validate-job:
+  stage: validate
+  image: registry.gitlab.com/4s1/docker/node:14-alpine-dev
+  rules:
+    - if: '$CI_COMMIT_TAG == null'
+  cache:
+    key: '$CI_COMMIT_REF_SLUG'
+    paths:
+      - .pnpm-store
+  artifacts:
+    paths:
+      - coverage/
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+  script:
+    - pnpm i
+    - pnpm run lint
+    - pnpm run build
+    - pnpm run test:cov
