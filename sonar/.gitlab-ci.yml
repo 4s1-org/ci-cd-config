@@ -12,10 +12,7 @@ sonarcloud-check:
     GIT_DEPTH: '0' # Tells git to fetch all the branches of the project, required by the analysis task
   before_script:
     - mkdir temp
-    - tsconfig_version=$(sed -n "s|^\s\s'@4s1/ts-config':\s\([0-9]\+\.[0-9]\+\.[0-9]\+\)$|\1|p" pnpm-lock.yaml)
-    - echo $tsconfig_version
-    - echo "${tsconfig_version}""
-    - echo "https://registry.npmjs.org/@4s1/ts-config/-/ts-config-${tsconfig_version}.tgz"
+    - tsconfig_version=$(sed -n "s|^\s\s'@4s1/ts-config':\s\([0-9]\+\.[0-9]\+\.[0-9]\+\)$|\1|p" pnpm-lock.yaml | head -1)
     - curl --fail --output temp/tsconfig_registry.tgz "https://registry.npmjs.org/@4s1/ts-config/-/ts-config-${tsconfig_version}.tgz"
     - tar -xf temp/tsconfig_registry.tgz -C temp
     - tsconfig_base=$(sed -n 's|.*"@4s1/ts-config/\([^;]*\)".*|\1|p' tsconfig.json)
