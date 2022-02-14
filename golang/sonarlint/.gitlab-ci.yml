@@ -1,5 +1,5 @@
 sonarcloud-check:
-  stage: sonar
+  stage: sonarlint
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: ['']
