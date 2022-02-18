@@ -1,7 +1,7 @@
 validate:
   stage: validate
-  # https://gitlab.com/4s1/docker/-/blob/main/golang/alpine/Dockerfile
-  image: registry.gitlab.com/4s1/docker/golang:alpine
+  # https://gitlab.com/4s1/docker/-/blob/main/golang/Dockerfile
+  image: registry.gitlab.com/4s1/docker/golang:latest
   coverage: /coverage:\s([\d\.]+)/
   # The problem is that to be able to use go get, one needs to put
   # the repository in the $GOPATH. So for example if your gitlab domain
