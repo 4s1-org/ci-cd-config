@@ -1,4 +1,4 @@
-validate-job:
+validate:
   stage: validate
   # https://gitlab.com/4s1/docker/-/blob/main/node/alpine/dev/Dockerfile
   image: registry.gitlab.com/4s1/docker/node:14-alpine-dev

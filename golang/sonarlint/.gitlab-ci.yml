@@ -1,4 +1,4 @@
-sonarcloud-check:
+sonarlint:
   stage: sonarlint
   image:
     # https://gitlab.com/4s1/docker/-/blob/main/sonarlint-cli/Dockerfile
