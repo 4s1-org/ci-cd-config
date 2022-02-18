@@ -1,26 +1,31 @@
 sonarcloud-check:
   stage: sonarlint
   image:
-    name: sonarsource/sonar-scanner-cli:latest
+    # https://gitlab.com/4s1/docker/-/blob/main/sonarlint-cli/Dockerfile
+    name: registry.gitlab.com/4s1/docker/sonarlint-cli:latest
     entrypoint: ['']
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - when: manual
+  allow_failure: true
   cache:
     key: '${CI_JOB_NAME}'
     paths:
       - .sonar/cache
   variables:
-    SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar' # Defines the location of the analysis task cache
-    GIT_DEPTH: '0' # Tells git to fetch all the branches of the project, required by the analysis task
+    # Defines the location of the analysis task cache
+    SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar'
+    # Tells git to fetch all the branches of the project, required by the analysis task
+    GIT_DEPTH: '0'
   before_script:
-    - mkdir temp
-    #- tsconfig_version=$(sed -n "s/^\s\s'@4s1\/ts-config':\s\([0-9]\+\.[0-9]\+\.[0-9]\+\)$/\1/p" pnpm-lock.yaml) | head -1
-    - curl --fail --output temp/tsconfig_registry.tgz "https://registry.npmjs.org/@4s1/ts-config/-/ts-config-1.4.0.tgz"
-    - tar -xf temp/tsconfig_registry.tgz -C temp
+    # SonarQube doesn't support extending tsconfig.json from a NPM package. So, grab it manually.
+    - mkdir tmp
+    - pkg_version=$(jq -r '.devDependencies["@4s1/ts-config"]' package.json)
+    - curl --fail --output tmp/tsconfig_registry.tgz "https://registry.npmjs.org/@4s1/ts-config/-/ts-config-${pkg_version}.tgz"
+    - tar -xf tmp/tsconfig_registry.tgz -C tmp
     - tsconfig_base=$(sed -n 's|.*"@4s1/ts-config/\([^;]*\)".*|\1|p' tsconfig.json)
-    - cp temp/package/${tsconfig_base} .
-    - rm -rf temp
+    - cp tmp/package/${tsconfig_base} .
+    - rm -rf tmp
     - sed -i "s|@4s1/ts-config|.|" tsconfig.json
   script:
     - sonar-scanner
-  allow_failure: true
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
