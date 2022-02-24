@@ -6,6 +6,7 @@ sonarlint:
     entrypoint: ['']
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      when: on_success
     - when: manual
   allow_failure: true
   cache:
@@ -17,6 +18,10 @@ sonarlint:
     SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar'
     # Tells git to fetch all the branches of the project, required by the analysis task
     GIT_DEPTH: '0'
+    # clone entire repo instead of reusing workspace
+    # - https://gitlab.com/gitlab-org/gitlab/-/issues/292470
+    # - https://gitlab.com/gitlab-org/gitlab/-/issues/350100
+    GIT_STRATEGY: 'clone'
   before_script:
     # SonarQube doesn't support extending tsconfig.json from a NPM package. So, grab it manually.
     - mkdir tmp
