@@ -5,6 +5,7 @@
     }
   ],
   "settings": {
-    "window.title": "Gitlab CI Config"
+    "window.title": "GitLab CI Config",
+    "cSpell.words": ["sonarlint"]
   }
 }
