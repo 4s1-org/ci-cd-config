@@ -1,3 +1,6 @@
+stages:
+  - sonarlint
+
 sonarlint:
   stage: sonarlint
   image:
