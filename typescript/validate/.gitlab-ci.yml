@@ -1,3 +1,6 @@
+stages:
+  - validate
+
 validate:
   stage: validate
   # https://gitlab.com/4s1/docker/-/blob/main/node/alpine/dev/Dockerfile
