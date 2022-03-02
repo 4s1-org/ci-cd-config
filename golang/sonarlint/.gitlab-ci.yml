@@ -1,3 +1,6 @@
+stages:
+  - sonarlint
+
 sonarlint:
   stage: sonarlint
   image:
@@ -5,7 +8,7 @@ sonarlint:
     name: registry.gitlab.com/4s1/docker/sonarlint-cli:latest
     entrypoint: ['']
   rules:
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || ($CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_REF_NAME !~ /^renovate\//)
       when: on_success
     - when: never
   cache:
