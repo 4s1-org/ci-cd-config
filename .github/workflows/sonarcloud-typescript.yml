@@ -16,6 +16,7 @@ jobs:
         run: |
           mkdir tmp
           pkg_version=$(jq -r '.devDependencies["@4s1/ts-config"]' package.json)
+          echo Version ${pkg_version}
           curl --fail --output tmp/tsconfig_registry.tgz "https://registry.npmjs.org/@4s1/ts-config/-/ts-config-${pkg_version}.tgz"
           tar -xf tmp/tsconfig_registry.tgz -C tmp
           tsconfig_base=$(sed -n 's|.*"@4s1/ts-config/\([^;]*\)".*|\1|p' tsconfig.json)
